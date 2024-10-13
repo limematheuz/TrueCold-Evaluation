@@ -16,7 +16,7 @@ const ValidatorComponent: React.FC = () => {
     const regex = /^[0-9.,]*$/;
     if (temperature === "" || !regex.test(temperature)) {
       setErrorMessage(
-        "Por favor, ingresa una temperatura dentro del rango de 2C y 8C. El campo de entrada de numero no puede estar vacio!"
+        "Por favor, ingresa una temperatura dentro del rango ( 2C - 8C). El campo de entrada de número no puede estar vacio!"
       );
       setIsValid(null);
       return;
@@ -31,7 +31,7 @@ const ValidatorComponent: React.FC = () => {
     const parsedTemperature = parseFloat(inputNormalizedTemperature);
 
     if (isNaN(parsedTemperature)) {
-      setErrorMessage("debes ingresar un numero válido!");
+      setErrorMessage("Debes ingresar un número válido!");
       setIsValid(null);
       return;
     }
@@ -57,7 +57,7 @@ const ValidatorComponent: React.FC = () => {
       setIsValid(data.valid);
       setErrorMessage("");
     } catch (error) {
-      setErrorMessage("error validando la temperatura:");
+      setErrorMessage("Error validando la temperatura:");
       setIsValid(null);
       setErrorMessage("Error al validar la temperatura. Inténtalo de nuevo.");
     }
@@ -76,7 +76,10 @@ const ValidatorComponent: React.FC = () => {
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {isValid !== null && (
         <p className="res-message">
-          La Temperatura es: {isValid ? "válida" : "no es válida"}
+          La Temperatura:{" "}
+          {isValid
+            ? "es válida dentro del rango ( 2C - 8C)"
+            : "no es válida dentro del rango ( 2C - 8C)"}
         </p>
       )}
       <Link className="home-link" to="/">
