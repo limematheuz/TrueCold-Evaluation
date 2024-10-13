@@ -1,24 +1,29 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, LoaderFunction } from "react-router-dom";
+import Spinner from "../Spinner/Spinner";
 import "./ValidatorComponent.css";
 
 const ValidatorComponent: React.FC = () => {
   const [temperature, setTemperature] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTemperature(event.target.value);
     setErrorMessage("");
   };
 
-  const validateTemperature = async () => {
+  const validateTemperature = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setLoading(true);
     const regex = /^[0-9.,]*$/;
     if (temperature === "" || !regex.test(temperature)) {
       setErrorMessage(
-        "Por favor, ingresa una temperatura dentro del rango ( 2C - 8C). El campo de entrada de número no puede estar vacio!"
+        "Por favor, ingresa una temperatura dentro del rango de 2C y 8C. El campo de entrada de numero no puede estar vacio!"
       );
       setIsValid(null);
+      setLoading(false);
       return;
     }
 
@@ -31,7 +36,7 @@ const ValidatorComponent: React.FC = () => {
     const parsedTemperature = parseFloat(inputNormalizedTemperature);
 
     if (isNaN(parsedTemperature)) {
-      setErrorMessage("Debes ingresar un número válido!");
+      setErrorMessage("debes ingresar un numero válido!");
       setIsValid(null);
       return;
     }
@@ -57,9 +62,11 @@ const ValidatorComponent: React.FC = () => {
       setIsValid(data.valid);
       setErrorMessage("");
     } catch (error) {
-      setErrorMessage("Error validando la temperatura:");
+      setErrorMessage("error validando la temperatura:");
       setIsValid(null);
       setErrorMessage("Error al validar la temperatura. Inténtalo de nuevo.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,14 +79,14 @@ const ValidatorComponent: React.FC = () => {
         onChange={handleInputChange}
         placeholder="ingresar temperatura"
       />
-      <button onClick={validateTemperature}>Validar temperatura</button>
+      <button onClick={validateTemperature} disabled={loading}>
+        {loading ? <Spinner /> : "Validar temperatura"}
+      </button>
+
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {isValid !== null && (
         <p className="res-message">
-          La Temperatura:{" "}
-          {isValid
-            ? "es válida dentro del rango ( 2C - 8C)"
-            : "no es válida dentro del rango ( 2C - 8C)"}
+          La Temperatura es: {isValid ? "válida" : "no es válida"}
         </p>
       )}
       <Link className="home-link" to="/">
