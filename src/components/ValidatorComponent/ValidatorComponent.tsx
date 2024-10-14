@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Link, LoaderFunction } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Spinner from "../Spinner/Spinner";
 import "./ValidatorComponent.css";
+
+interface ApiResponse {
+  valid: boolean;
+}
 
 const ValidatorComponent: React.FC = () => {
   const [temperature, setTemperature] = useState<string>("");
@@ -14,8 +18,7 @@ const ValidatorComponent: React.FC = () => {
     setErrorMessage("");
   };
 
-  const validateTemperature = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const validateTemperature = async () => {
     setLoading(true);
     const regex = /^[0-9.,]*$/;
     if (temperature === "" || !regex.test(temperature)) {
@@ -54,15 +57,15 @@ const ValidatorComponent: React.FC = () => {
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Error: ${errorData.error || response.statusText}`);
+        throw new Error(`Error: ${response.status || response.statusText}`);
       }
 
-      const data = await response.json();
+      const data: ApiResponse = await response.json();
+
       setIsValid(data.valid);
       setErrorMessage("");
     } catch (error) {
-      setErrorMessage("error validando la temperatura:");
+      setErrorMessage("Error validando la temperatura:");
       setIsValid(null);
       setErrorMessage("Error al validar la temperatura. Inténtalo de nuevo.");
     } finally {
@@ -86,7 +89,10 @@ const ValidatorComponent: React.FC = () => {
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {isValid !== null && (
         <p className="res-message">
-          La Temperatura es: {isValid ? "válida" : "no es válida"}
+          La Temperatura es{" "}
+          {isValid
+            ? "válida y está dentro del rango de ( 2C - 8C )"
+            : "no es válida porque no está dentro del rango de ( 2C - 8C )"}
         </p>
       )}
       <Link className="home-link" to="/">
