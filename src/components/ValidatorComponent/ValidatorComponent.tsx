@@ -39,7 +39,7 @@ const ValidatorComponent: React.FC = () => {
     const parsedTemperature = parseFloat(inputNormalizedTemperature);
 
     if (isNaN(parsedTemperature)) {
-      setErrorMessage("debes ingresar un numero válido!");
+      setErrorMessage("Debes ingresar un número válido!");
       setIsValid(null);
       return;
     }

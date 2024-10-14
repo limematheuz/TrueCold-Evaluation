@@ -64,15 +64,15 @@
   padding: 6px 16px;
   text-align: center;
   font-weight: 500;
-  max-width: 360px;
+  max-width: 400px;
 }
 
 .res-message {
-  background-color: rgba(217, 145, 0, 0.251);
-  color: rgb(217, 119, 0);
+  background-color: #0051a834;
+  color: #0051a8;
   border-radius: 8px;
   padding: 6px 6px;
   text-align: center;
   font-weight: 500;
-  max-width: 360px;
+  max-width: 400px;
 }
