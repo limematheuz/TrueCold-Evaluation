@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, LoaderFunction } from "react-router-dom";
 import Spinner from "../Spinner/Spinner";
 import "./ValidatorComponent.css";
 
@@ -39,7 +39,7 @@ const ValidatorComponent: React.FC = () => {
     const parsedTemperature = parseFloat(inputNormalizedTemperature);
 
     if (isNaN(parsedTemperature)) {
-      setErrorMessage("Debes ingresar un número válido!");
+      setErrorMessage("debes ingresar un número válido!");
       setIsValid(null);
       return;
     }
@@ -88,7 +88,7 @@ const ValidatorComponent: React.FC = () => {
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {isValid !== null && (
-        <p className="res-message">
+        <p className={`${isValid ? "valid-message" : "invalid-message"}`}>
           La Temperatura es{" "}
           {isValid
             ? "válida y está dentro del rango de ( 2C - 8C )"
